@@ -1,17 +1,15 @@
 {
-  "name": "v11-stock-app",
+  "name": "v11-stock-analyzer",
   "version": "11.2.0",
-  "description": "한국투자증권 API 기반 단타 분석 프로그램",
+  "description": "한국투자증권 OpenAPI 기반 주식 단타 분석 앱",
   "main": "api-server.js",
-
   "scripts": {
     "start": "node api-server.js"
   },
-
   "dependencies": {
-    "axios": "^1.10.0",
+    "axios": "^1.7.9",
     "cors": "^2.8.5",
-    "dotenv": "^16.6.1",
-    "express": "^5.1.0"
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
   }
 }
