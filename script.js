@@ -1,98 +1,153 @@
 // =======================================
-// V11.2 GitHub Pages 테스트용 script.js
+// V11.2 주식 단타 분석
+// script.js
+// 한국투자증권 API 연결용
 // =======================================
 
-async function getPrice(){
+
+async function getPrice() {
+
 
     const code =
-    document.getElementById("stockCode").value;
+        document.getElementById("stockCode").value.trim();
 
 
-    // 현재는 테스트 데이터
-    // 이후 API 서버 연결 시 교체
-
-    const data = {
-
-        name: "삼성전자",
-
-        price: 83500,
-
-        change: 1.25,
-
-        volume: 15234567,
-
-        ma5: 82800,
-
-        ma20: 81500,
-
-        ma60: 79000,
-
-        score: 82
-
-    };
-
-
-    document.getElementById("stockName")
-    .textContent = data.name;
-
-
-    document.getElementById("price")
-    .textContent =
-    data.price.toLocaleString()+" 원";
-
-
-    document.getElementById("change")
-    .textContent =
-    data.change+" %";
-
-
-    document.getElementById("volume")
-    .textContent =
-    data.volume.toLocaleString();
-
-
-    document.getElementById("ma5")
-    .textContent =
-    data.ma5.toLocaleString();
-
-
-    document.getElementById("ma20")
-    .textContent =
-    data.ma20.toLocaleString();
-
-
-    document.getElementById("ma60")
-    .textContent =
-    data.ma60.toLocaleString();
-
-
-
-    let signal="관망";
-
-
-    if(data.score >= 80){
-
-        signal="🟢 매수 관심";
-
-    }
-    else if(data.score >=60){
-
-        signal="🟡 관심";
-
+    if(code === ""){
+        alert("종목코드를 입력하세요");
+        return;
     }
 
 
-    document.getElementById("signal")
-    .textContent=signal;
+    try {
+
+
+        // API 서버 요청
+        const response = await fetch(
+            "http://localhost:3000/price?code=" + code
+        );
+
+
+        const data = await response.json();
+
+
+
+        console.log(data);
+
+
+
+        // 화면 출력
+
+        document.getElementById("stockName").innerText =
+            data.name || "-";
+
+
+        document.getElementById("price").innerText =
+            Number(data.price).toLocaleString() + " 원";
+
+
+        document.getElementById("change").innerText =
+            data.change + "%";
+
+
+        document.getElementById("volume").innerText =
+            Number(data.volume).toLocaleString();
+
+
+
+        // 이동평균
+
+        document.getElementById("ma5").innerText =
+            data.ma5 || "-";
+
+
+        document.getElementById("ma20").innerText =
+            data.ma20 || "-";
+
+
+        document.getElementById("ma60").innerText =
+            data.ma60 || "-";
+
+
+
+        // AI 분석
+
+        let signal = "관망";
+
+
+        if(
+            data.price > data.ma5 &&
+            data.ma5 > data.ma20
+        ){
+
+            signal = "🟢 매수 관심";
+
+        }
+
+
+        else if(
+            data.price < data.ma20
+        ){
+
+            signal = "🔴 매도 주의";
+
+        }
+
+
+
+        document.getElementById("signal")
+        .innerText = signal;
+
+
+
+    }
+
+
+    catch(error){
+
+
+        console.error(error);
+
+
+        alert(
+            "서버 연결 실패\napi-server.js 실행 확인"
+        );
+
+
+    }
+
+
 
 }
 
 
 
-// 페이지 열면 자동 실행
+// =======================================
+// 관심종목 클릭
+// =======================================
 
-window.onload=function(){
 
-    getPrice();
+document
+.querySelectorAll("#favoriteList li")
+.forEach(item=>{
 
-};
+
+    item.onclick=function(){
+
+
+        let code =
+        this.innerText.substring(0,6);
+
+
+        document.getElementById(
+            "stockCode"
+        ).value = code;
+
+
+
+        getPrice();
+
+
+    }
+
+
+});
