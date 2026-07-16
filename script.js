@@ -23,9 +23,8 @@ async function getPrice() {
 
         // API 서버 요청
         const response = await fetch(
-            "http://localhost:3000/price?code=" + code
-        );
-
+"https://v11-api-server.onrender.com/price?code=" + code
+ );
 
         const data = await response.json();
 
