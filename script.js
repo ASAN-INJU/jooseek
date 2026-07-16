@@ -1,71 +1,98 @@
-const API_URL = "http://localhost:3000";
+// =======================================
+// V11.2 GitHub Pages 테스트용 script.js
+// =======================================
 
-async function getPrice() {
+async function getPrice(){
 
-    const code = document.getElementById("stockCode").value.trim();
+    const code =
+    document.getElementById("stockCode").value;
 
-    if (!code) {
-        alert("종목코드를 입력하세요.");
-        return;
+
+    // 현재는 테스트 데이터
+    // 이후 API 서버 연결 시 교체
+
+    const data = {
+
+        name: "삼성전자",
+
+        price: 83500,
+
+        change: 1.25,
+
+        volume: 15234567,
+
+        ma5: 82800,
+
+        ma20: 81500,
+
+        ma60: 79000,
+
+        score: 82
+
+    };
+
+
+    document.getElementById("stockName")
+    .textContent = data.name;
+
+
+    document.getElementById("price")
+    .textContent =
+    data.price.toLocaleString()+" 원";
+
+
+    document.getElementById("change")
+    .textContent =
+    data.change+" %";
+
+
+    document.getElementById("volume")
+    .textContent =
+    data.volume.toLocaleString();
+
+
+    document.getElementById("ma5")
+    .textContent =
+    data.ma5.toLocaleString();
+
+
+    document.getElementById("ma20")
+    .textContent =
+    data.ma20.toLocaleString();
+
+
+    document.getElementById("ma60")
+    .textContent =
+    data.ma60.toLocaleString();
+
+
+
+    let signal="관망";
+
+
+    if(data.score >= 80){
+
+        signal="🟢 매수 관심";
+
+    }
+    else if(data.score >=60){
+
+        signal="🟡 관심";
+
     }
 
-    try {
 
-        const response = await fetch(`${API_URL}/price/${code}`);
-
-        if (!response.ok) {
-            throw new Error("서버 연결 실패");
-        }
-
-        const data = await response.json();
-
-        document.getElementById("stockName").textContent =
-            data.name || "-";
-
-        document.getElementById("price").textContent =
-            Number(data.price).toLocaleString() + " 원";
-
-        document.getElementById("change").textContent =
-            (data.change ?? 0) + "%";
-
-        document.getElementById("volume").textContent =
-            Number(data.volume ?? 0).toLocaleString();
-
-        document.getElementById("ma5").textContent =
-            data.ma5 ?? "-";
-
-        document.getElementById("ma20").textContent =
-            data.ma20 ?? "-";
-
-        document.getElementById("ma60").textContent =
-            data.ma60 ?? "-";
-
-        let signal = "관망";
-
-        if ((data.score ?? 0) >= 80) {
-            signal = "🟢 매수";
-        } else if ((data.score ?? 0) >= 60) {
-            signal = "🟡 관심";
-        } else {
-            signal = "🔴 관망";
-        }
-
-        document.getElementById("signal").textContent = signal;
-
-    } catch (err) {
-
-        console.error(err);
-
-        alert("API 서버 연결에 실패했습니다.");
-
-    }
+    document.getElementById("signal")
+    .textContent=signal;
 
 }
 
-window.onload = () => {
+
+
+// 페이지 열면 자동 실행
+
+window.onload=function(){
 
     getPrice();
-
-    setInterval(getPrice, 5000);
 
 };
