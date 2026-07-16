@@ -175,7 +175,14 @@ FID_ORG_ADJ_PRC:"0"
 
 
 const candles =
-dailyResponse.data.output2 || [];
+dailyResponse.data.output2 ||
+dailyResponse.data.output ||
+[];
+
+console.log(
+"일봉 데이터 개수:",
+candles.length
+);
 
 
 // 최근 종가 배열
