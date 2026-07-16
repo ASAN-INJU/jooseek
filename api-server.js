@@ -113,3 +113,141 @@ app.listen(PORT, async () => {
     await issueAccessToken();
 
 });
+// =============================================
+// V11.2 API SERVER
+// Part 2
+// 현재가 조회 기능
+// =============================================
+
+
+async function getStockPrice(code){
+
+    try{
+
+        const url =
+        `${BASE_URL}/uapi/domestic-stock/v1/quotations/inquire-price`;
+
+
+        const response = await axios.get(
+
+            url,
+
+            {
+                headers:{
+
+                    "content-type":
+                    "application/json",
+
+                    "authorization":
+                    `Bearer ${ACCESS_TOKEN}`,
+
+                    "appkey":
+                    APP_KEY,
+
+                    "appsecret":
+                    APP_SECRET,
+
+                    "tr_id":
+                    "FHKST01010100"
+
+                },
+
+                params:{
+
+                    "fid_cond_mrkt_div_code":
+                    "J",
+
+                    "fid_input_iscd":
+                    code
+
+                }
+
+            }
+
+        );
+
+
+        const output =
+        response.data.output;
+
+
+        return {
+
+            name:
+            output.hts_kor_isnm,
+
+            price:
+            Number(output.stck_prpr),
+
+            change:
+            Number(output.prdy_ctrt),
+
+            volume:
+            Number(output.acml_vol),
+
+            score:
+            0,
+
+            ma5:"-",
+
+            ma20:"-",
+
+            ma60:"-"
+
+        };
+
+
+    }catch(error){
+
+        console.log(
+            "현재가 조회 오류"
+        );
+
+        console.log(
+            error.response?.data ||
+            error.message
+        );
+
+
+        return null;
+
+    }
+
+}
+
+
+
+//--------------------------------------
+// 현재가 API
+//--------------------------------------
+
+app.get("/price/:code", async(req,res)=>{
+
+
+    const code =
+    req.params.code;
+
+
+    const data =
+    await getStockPrice(code);
+
+
+
+    if(!data){
+
+        return res.status(500)
+        .json({
+
+            error:
+            "조회 실패"
+
+        });
+
+    }
+
+
+
+    res.json(data);
+
+
+});
