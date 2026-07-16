@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V11.2 주식 단타 분석</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+
+    <meta name="theme-color" content="#0d47a1">
+</head>
+
+<body>
+
+<header>
+    <h1>📈 V11.2 주식 단타 분석</h1>
+    <p>한국투자증권 OpenAPI</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>종목코드</h2>
+
+        <input
+            type="text"
+            id="stockCode"
+            value="005930"
+            placeholder="예 : 005930">
+
+        <button onclick="getPrice()">
+            현재가 조회
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h2>실시간 시세</h2>
+
+        <table>
+
+            <tr>
+                <td>종목</td>
+                <td id="stockName">-</td>
+            </tr>
+
+            <tr>
+                <td>현재가</td>
+                <td id="price">-</td>
+            </tr>
+
+            <tr>
+                <td>등락률</td>
+                <td id="change">-</td>
+            </tr>
+
+            <tr>
+                <td>거래량</td>
+                <td id="volume">-</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="card">
+
+        <h2>이동평균선</h2>
+
+        <table>
+
+            <tr>
+                <td>MA5</td>
+                <td id="ma5">-</td>
+            </tr>
+
+            <tr>
+                <td>MA20</td>
+                <td id="ma20">-</td>
+            </tr>
+
+            <tr>
+                <td>MA60</td>
+                <td id="ma60">-</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="card">
+
+        <h2>AI 분석</h2>
+
+        <h1 id="signal">
+            대기중...
+        </h1>
+
+    </div>
+
+    <div class="card">
+
+        <h2>관심종목</h2>
+
+        <ul id="favoriteList">
+
+            <li>005930 삼성전자</li>
+            <li>000660 SK하이닉스</li>
+            <li>035420 NAVER</li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+
+if ('serviceWorker' in navigator) {
+
+    navigator.serviceWorker.register('sw.js');
+
+}
+
+</script>
+
+</body>
+</html>
