@@ -124,22 +124,9 @@ function setupAutocomplete() {
 // --------------------
 // 페이지 시작
 // --------------------
-function setupAutocomplete() {
-
-    ...
-}
-
-
-// 여기에 getPrice() 함수 추가
-
-
-window.onload = async function () {
-
-    await loadStocks();
-
-    setupAutocomplete();
-
-};
+// --------------------
+// 페이지 시작
+// --------------------
 window.onload = async function () {
 
     await loadStocks();
