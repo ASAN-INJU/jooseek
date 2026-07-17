@@ -1,58 +1,188 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>주식 단타 분석 V11.2</title>
+
+<title>주식 단타 분석 V11.3 Ultimate</title>
+
 <link rel="stylesheet" href="style.css">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
+
 <body>
+
 <header>
-<h1>📈 주식 단타 분석 V11.2</h1>
-<p>한국투자증권 API 연동 준비</p>
+
+<h1>📈 주식 단타 분석 V11.3 Ultimate</h1>
+
+<p>
+한국투자증권 API + AI 단타분석
+</p>
+
 </header>
+
 <main class="container">
+
+<!-- 검색 -->
+
 <section class="search-box">
-<input id="stockCode" placeholder="종목코드 (예:005930)">
-<button onclick="getPrice()">분석 시작</button>
+
+<input
+type="text"
+id="stockCode"
+placeholder="종목명 또는 종목코드 입력"
+autocomplete="off">
+
+<button onclick="getPrice()">
+분석 시작
+</button>
+
+<div id="suggestions"></div>
+
 </section>
+
+<!-- 종목 정보 -->
+
 <section class="card">
+
 <h2>종목 정보</h2>
+
 <div>종목명 <span id="name">-</span></div>
+
 <div>현재가 <span id="price">-</span></div>
+
 <div>등락률 <span id="change">-</span></div>
+
 <div>거래량 <span id="volume">-</span></div>
+
 </section>
+
+<!-- 이동평균 -->
+
 <section class="card">
+
 <h2>이동평균선</h2>
+
 <div>5일선 <span id="ma5">-</span></div>
+
 <div>20일선 <span id="ma20">-</span></div>
+
 <div>60일선 <span id="ma60">-</span></div>
+
 </section>
+
+<!-- AI -->
+
 <section class="card">
+
 <h2>AI 단타 점수</h2>
+
 <h1 id="score">0점</h1>
-<div id="star">☆☆☆☆☆</div>
-<p id="comment">분석 대기중...</p>
+
+<div id="star">
+☆☆☆☆☆
+</div>
+
+<p id="comment">
+분석 대기중...
+</p>
+
 </section>
+
+<!-- 차트 -->
+
 <section class="card">
-<h2>차트</h2>
-<canvas id="priceChart" height="120"></canvas>
+
+<h2>실시간 차트</h2>
+
+<canvas
+id="priceChart"
+height="120">
+</canvas>
+
 </section>
+
+<!-- 호가 -->
+
 <section class="card">
-<h2>호가</h2>
-<div id="orderbook">API 연결 후 표시됩니다.</div>
+
+<h2>실시간 호가</h2>
+
+<div id="orderbook">
+
+API 연결 후 표시됩니다.
+
+</div>
+
 </section>
+
+<!-- 관심종목 -->
+
 <section class="card">
+
 <h2>관심종목</h2>
+
 <ul id="favorites">
+
 <li>삼성전자</li>
+
 <li>SK하이닉스</li>
+
 <li>NAVER</li>
+
 </ul>
+
 </section>
+
+<!-- AI 추천 -->
+
+<section class="card">
+
+<h2>AI 추천</h2>
+
+<div id="recommend">
+
+추천 없음
+
+</div>
+
+<div>
+
+목표가 :
+<span id="targetPrice">-</span>
+
+</div>
+
+<div>
+
+손절가 :
+<span id="stopPrice">-</span>
+
+</div>
+
+</section>
+
+<!-- 최근 검색 -->
+
+<section class="card">
+
+<h2>최근 검색</h2>
+
+<ul id="recentSearch">
+
+<li>검색 기록이 없습니다.</li>
+
+</ul>
+
+</section>
+
 </main>
+
 <script src="script.js"></script>
+
 </body>
-</html>
+</html>=-
