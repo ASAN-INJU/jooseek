@@ -1,138 +1,70 @@
 // =======================================
-// V11.2 script.js
-// GitHub Pages + API Server 연동
+// V11.3 Ultimate
+// script.js
 // =======================================
 
 const API_URL = "http://localhost:3000";
 
-// 종목 조회
-async function getPrice() {
+let stockList = [];
+let chart = null;
 
-    const code = document.getElementById("stockCode").value.trim();
-
-    if (!code) {
-        alert("종목코드를 입력하세요.");
-        return;
-    }
-
+// --------------------
+// 종목 목록 불러오기
+// --------------------
+async function loadStocks() {
     try {
-
-        const res = await fetch(`${API_URL}/price?code=${code}`);
-
-        const data = await res.json();
-
-        document.getElementById("stockName").innerText = data.name;
-        document.getElementById("price").innerText =
-            Number(data.price).toLocaleString() + " 원";
-
-        document.getElementById("change").innerText =
-            data.change + "%";
-
-        document.getElementById("volume").innerText =
-            Number(data.volume).toLocaleString();
-
-        analyze(data);
-
+        const res = await fetch("stocks.json");
+        stockList = await res.json();
     } catch (e) {
-
-        console.error(e);
-
-        alert("API 연결 실패");
-
+        console.log("stocks.json 로드 실패", e);
     }
-
 }
 
+// --------------------
+// 자동완성
+// --------------------
+function setupAutocomplete() {
 
-// AI 분석
-function analyze(data){
+    const input = document.getElementById("stockCode");
+    const box = document.getElementById("suggestions");
 
-    let score = 50;
+    input.addEventListener("input", () => {
 
-    if(data.change > 0) score += 10;
+        const keyword = input.value.trim().toLowerCase();
 
-    if(data.volume > 1000000) score += 10;
+        if (keyword.length === 0) {
+            box.innerHTML = "";
+            return;
+        }
 
-    if(data.ma5 > data.ma20) score += 15;
+        const result = stockList.filter(item =>
+            item.name.toLowerCase().includes(keyword) ||
+            item.code.includes(keyword)
+        ).slice(0, 10);
 
-    if(data.rsi < 35) score += 10;
+        box.innerHTML = "";
 
-    if(data.macd > 0) score += 5;
+        result.forEach(item => {
 
-    let result = "";
+            const div = document.createElement("div");
 
-    if(score >= 90){
+            div.innerHTML =
+                `${item.name} (${item.code})`;
 
-        result="★★★★★ 매우 강한 매수";
+            div.onclick = () => {
 
-    }else if(score >=80){
+                input.value = item.code;
 
-        result="★★★★☆ 매수";
+                box.innerHTML = "";
 
-    }else if(score >=70){
+                getPrice();
 
-        result="★★★☆☆ 관심";
+            };
 
-    }else if(score >=60){
-
-        result="★★☆☆☆ 관망";
-
-    }else{
-
-        result="★☆☆☆☆ 매수 비추천";
-
-    }
-
-    document.getElementById("score").innerHTML =
-    `
-    <h2>${score} 점</h2>
-    <h3>${result}</h3>
-    `;
-
-}
-
-
-// 추천종목
-async function loadRecommend(){
-
-    try{
-
-        const res = await fetch(`${API_URL}/recommend`);
-
-        const list = await res.json();
-
-        let html="";
-
-        list.forEach(item=>{
-
-            html+=`
-            <tr>
-
-                <td>${item.code}</td>
-
-                <td>${item.name}</td>
-
-                <td>${item.score}</td>
-
-            </tr>
-            `;
+            box.appendChild(div);
 
         });
 
-        document.getElementById("recommendList").innerHTML=html;
-
-    }catch(e){
-
-        console.log(e);
-
-    }
+    });
 
 }
-
-
-// 페이지 시작
-window.onload=function(){
-
-    loadRecommend();
-
-};
