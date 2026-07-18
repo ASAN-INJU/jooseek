@@ -143,3 +143,128 @@ drawChart(data);
 makeAnalysis(data);
 
 }
+// ===========================================
+// V12 Ultimate script.js (2부)
+// 차트 + AI 분석
+// ===========================================
+
+// 차트 그리기
+function drawChart(data){
+
+    const ctx = document.getElementById("chart");
+
+    if(chart){
+        chart.destroy();
+    }
+
+    chart = new Chart(ctx,{
+
+        type:"line",
+
+        data:{
+
+            labels:["60일","20일","5일","현재"],
+
+            datasets:[{
+
+                label:"주가",
+
+                data:[
+
+                    data.ma60,
+
+                    data.ma20,
+
+                    data.ma5,
+
+                    data.price
+
+                ],
+
+                tension:0.35
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false
+
+        }
+
+    });
+
+}
+
+// AI 분석
+function makeAnalysis(data){
+
+    let text = "";
+
+    if(data.price > data.ma5){
+        text += "✅ 현재가가 5일 이동평균선 위에 있습니다.<br>";
+    }else{
+        text += "⚠ 현재가가 5일 이동평균선 아래입니다.<br>";
+    }
+
+    if(data.ma5 > data.ma20){
+        text += "✅ 단기 상승 추세입니다.<br>";
+    }else{
+        text += "⚠ 단기 추세가 약합니다.<br>";
+    }
+
+    if(data.ma20 > data.ma60){
+        text += "✅ 중기 상승 추세입니다.<br>";
+    }else{
+        text += "⚠ 중기 추세가 약합니다.<br>";
+    }
+
+    if(data.score >= 90){
+
+        text += "<br><b>★★★★★ 적극매수</b>";
+
+    }else if(data.score >= 80){
+
+        text += "<br><b>★★★★☆ 매수</b>";
+
+    }else if(data.score >= 70){
+
+        text += "<br><b>★★★☆☆ 관심</b>";
+
+    }else if(data.score >= 60){
+
+        text += "<br><b>★★☆☆☆ 관망</b>";
+
+    }else{
+
+        text += "<br><b>☆☆☆☆☆ 비추천</b>";
+
+    }
+
+    document.getElementById("analysis").innerHTML = text;
+
+}
+
+// 뉴스 표시
+function updateNews(newsList){
+
+    let html = "";
+
+    newsList.forEach(item=>{
+
+        html += `
+        <p>
+            <a href="${item.url}" target="_blank">
+                ${item.title}
+            </a>
+        </p>
+        `;
+
+    });
+
+    document.getElementById("news").innerHTML = html;
+
+}
