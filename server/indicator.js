@@ -99,6 +99,10 @@ module.exports = {
 
     calculateRSI,
 
+    calculateEMA,
+
+    calculateMACD,
+
     highest,
 
     lowest,
