@@ -1,12 +1,14 @@
-// =====================================
+// ========================================
 // api-server.js
-// =====================================
+// ========================================
 
 require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-const axios = require("axios");
+
+const { getPrice } = require("./kis");
+const { analyze } = require("./ai");
 
 const app = express();
 
@@ -15,62 +17,48 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-let accessToken = "";
+// 서버 확인
+app.get("/", (req, res) => {
 
-// 토큰 발급
-async function getAccessToken() {
-    try {
-        const response = await axios.post(
-            process.env.KIS_BASE_URL + "/oauth2/tokenP",
-            {
-                grant_type: "client_credentials",
-                appkey: process.env.APP_KEY,
-                appsecret: process.env.APP_SECRET
-            }
-        );
+    res.json({
 
-        accessToken = response.data.access_token;
-        console.log("토큰 발급 성공");
-    } catch (err) {
-        console.error("토큰 발급 실패");
-        console.error(err.response?.data || err.message);
-    }
-}
+        server: "Stock AI Server",
 
-// 서버 시작 시 토큰 발급
-getAccessToken();
+        version: "13.0",
 
-// 시세 조회 API
+        status: "Running"
+
+    });
+
+});
+
+// 현재가 조회
 app.get("/api/price/:code", async (req, res) => {
 
-    const code = req.params.code;
-
     try {
 
-        // 여기에 한국투자증권 시세 조회 API 호출
+        const code = req.params.code;
 
-        // 현재는 테스트 데이터
-        res.json({
-            name: "삼성전자",
-            price: 83500,
-            change: 1.52,
-            open: 83000,
-            high: 84200,
-            low: 82800,
-            volume: 15234567,
-            ma5: 82900,
-            ma20: 81200,
-            ma60: 78500,
-            score: 88,
-            signal: "매수",
-            target: 86500,
-            stop: 81800
-        });
+        const stock = await getPrice(code);
 
-    } catch (err) {
+        // 임시값
+        stock.ma5 = stock.price;
+        stock.ma20 = stock.price;
+        stock.ma60 = stock.price;
+        stock.rsi = 50;
+
+        const result = analyze(stock);
+
+        res.json(result);
+
+    } catch (error) {
+
+        console.log(error);
 
         res.status(500).json({
-            error: "조회 실패"
+
+            error: "주가 조회 실패"
+
         });
 
     }
@@ -78,5 +66,13 @@ app.get("/api/price/:code", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log("Server Running : " + PORT);
+
+    console.log("================================");
+
+    console.log(" Stock AI Server Running ");
+
+    console.log(" Port :", PORT);
+
+    console.log("================================");
+
 });
