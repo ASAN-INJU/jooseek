@@ -1,40 +1,145 @@
-// =======================================
-// V11.3 Ultimate
-// 종목 자동완성
-// =======================================
+// ===========================================
+// V12 Ultimate script.js (1부)
+// ===========================================
 
-const API_URL = "http://localhost:3000";
-
-let stockList = [];
+let stocks = [];
 let chart = null;
 
-// --------------------
-// 종목 목록 불러오기
-// --------------------
+// 종목목록 불러오기
 async function loadStocks() {
+    const res = await fetch("stocks.json");
+    stocks = await res.json();
+}
 
-    try {
+loadStocks();
 
-        const res = await fetch("stocks.json");
+// 자동검색
+const input = document.getElementById("stockCode");
 
-        if (!res.ok) {
-            throw new Error("stocks.json 로드 실패");
-        }
+input.addEventListener("input", function () {
 
-        stockList = await res.json();
+    const keyword = this.value.trim();
 
-        console.log("종목수 :", stockList.length);
+    const list = document.getElementById("suggestions");
 
-    } catch (e) {
+    list.innerHTML = "";
 
-        console.error(e);
+    if (keyword.length < 1) return;
 
-        stockList = [];
+    const result = stocks.filter(s =>
+        s.name.includes(keyword)
+    ).slice(0, 10);
+
+    result.forEach(stock => {
+
+        const div = document.createElement("div");
+
+        div.className = "item";
+
+        div.innerHTML =
+            stock.name +
+            " (" +
+            stock.code +
+            ")";
+
+        div.onclick = function () {
+
+            input.value = stock.name;
+
+            list.innerHTML = "";
+
+            getPrice(stock.code);
+
+        };
+
+        list.appendChild(div);
+
+    });
+
+});
+
+// 시세조회
+async function getPrice(code){
+
+    if(!code){
+
+        alert("종목을 선택하세요.");
+
+        return;
+
+    }
+
+    try{
+
+        const response = await fetch(
+
+        "https://v11-api-server.onrender.com/api/price/" + code
+
+        );
+
+        const data = await response.json();
+
+        updateScreen(data);
+
+    }
+
+    catch(e){
+
+        alert("서버 연결 실패");
+
+        console.log(e);
 
     }
 
 }
 
-// --------------------
-// 자동완성
-// --------------------
+// 화면표시
+
+function updateScreen(data){
+
+document.getElementById("name").innerHTML=data.name;
+
+document.getElementById("price").innerHTML=
+Number(data.price).toLocaleString()+"원";
+
+document.getElementById("change").innerHTML=
+data.change+"%";
+
+document.getElementById("open").innerHTML=
+Number(data.open).toLocaleString();
+
+document.getElementById("high").innerHTML=
+Number(data.high).toLocaleString();
+
+document.getElementById("low").innerHTML=
+Number(data.low).toLocaleString();
+
+document.getElementById("volume").innerHTML=
+Number(data.volume).toLocaleString();
+
+document.getElementById("ma5").innerHTML=
+Number(data.ma5).toLocaleString();
+
+document.getElementById("ma20").innerHTML=
+Number(data.ma20).toLocaleString();
+
+document.getElementById("ma60").innerHTML=
+Number(data.ma60).toLocaleString();
+
+document.getElementById("target").innerHTML=
+Number(data.target).toLocaleString();
+
+document.getElementById("stop").innerHTML=
+Number(data.stop).toLocaleString();
+
+document.getElementById("score").innerHTML=
+data.score+"점";
+
+document.getElementById("signal").innerHTML=
+data.signal;
+
+drawChart(data);
+
+makeAnalysis(data);
+
+}
