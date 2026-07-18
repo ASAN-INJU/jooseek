@@ -1,38 +1,56 @@
 // ========================================
 // kis.js
-// 한국투자증권 API
+// 한국투자증권 API 전용
 // ========================================
 
 const axios = require("axios");
 
 let accessToken = "";
 
+// ===============================
 // 토큰 발급
+// ===============================
 async function getAccessToken() {
 
     if (accessToken) {
         return accessToken;
     }
 
-    const response = await axios.post(
+    try {
 
-        process.env.KIS_BASE_URL + "/oauth2/tokenP",
+        const response = await axios.post(
 
-        {
-            grant_type: "client_credentials",
-            appkey: process.env.APP_KEY,
-            appsecret: process.env.APP_SECRET
-        }
+            process.env.KIS_BASE_URL + "/oauth2/tokenP",
 
-    );
+            {
+                grant_type: "client_credentials",
+                appkey: process.env.APP_KEY,
+                appsecret: process.env.APP_SECRET
+            }
 
-    accessToken = response.data.access_token;
+        );
 
-    return accessToken;
+        accessToken = response.data.access_token;
+
+        console.log("토큰 발급 성공");
+
+        return accessToken;
+
+    } catch (err) {
+
+        console.log("토큰 발급 실패");
+
+        console.log(err.response?.data || err.message);
+
+        throw err;
+
+    }
 
 }
 
+// ===============================
 // 현재가 조회
+// ===============================
 async function getPrice(code) {
 
     const token = await getAccessToken();
@@ -71,10 +89,10 @@ async function getPrice(code) {
     return response.data.output;
 
 }
-// ========================================
-// 최근 종가 조회 (일봉)
-// ========================================
 
+// ===============================
+// 일봉 조회
+// ===============================
 async function getDailyPrices(code) {
 
     const token = await getAccessToken();
@@ -117,8 +135,17 @@ async function getDailyPrices(code) {
     return response.data.output2 || [];
 
 }
+
+// ========================================
+// 다른 파일에서 사용할 함수
+// ========================================
+
 module.exports = {
 
-    getPrice
+    getAccessToken,
+
+    getPrice,
+
+    getDailyPrices
 
 };
