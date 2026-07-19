@@ -84,8 +84,7 @@ else if (rsi > 70)
     else
         signal = "☆☆☆☆☆ 비추천";
 
-    const current = close[close.length - 1];
-
+    const current = close[close.length - 1] || 0;
     const target = Math.round(current * 1.05);
 
     const stop = Math.round(current * 0.97);
