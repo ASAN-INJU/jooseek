@@ -1,8 +1,6 @@
-// =======================================
-// V11.2 Stock Analysis API Server
-// =======================================
-
 require("dotenv").config();
+
+console.log("=== NEW V11.2 SERVER START ===");
 
 const express = require("express");
 const cors = require("cors");
