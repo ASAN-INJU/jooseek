@@ -6,8 +6,8 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-
 const kis = require("./kis");
+
 const analyzer = require("./analyzer");
 
 const app = express();
