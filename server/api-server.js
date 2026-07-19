@@ -1,4 +1,3 @@
-console.log("TEST V11.2 UPDATED");
 require("dotenv").config();
 
 console.log("=== NEW V11.2 SERVER START ===");
