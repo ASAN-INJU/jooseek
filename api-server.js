@@ -1,29 +1,3 @@
-const express = require("express");
-const cors = require("cors");
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-
-// 기본 접속 확인
-app.get("/", (req,res)=>{
-    res.send("V11.2 API Server Running");
-});
-
-
-// 주식 조회
-app.get("/api/stock/:code", async (req,res)=>{
-    ...
-});
-
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT,()=>{
-    console.log(`Server running on ${PORT}`);
-});
 require("dotenv").config();
 
 console.log("=== NEW V11.2 SERVER START ===");
@@ -34,7 +8,9 @@ const cors = require("cors");
 const app = express();
 
 
+// ================================
 // 미들웨어
+// ================================
 app.use(cors());
 app.use(express.json());
 
@@ -52,7 +28,7 @@ app.get("/", (req, res) => {
 // ================================
 // 주식 조회 테스트 API
 // ================================
-app.get("/api/stock/:code", (req, res) => {
+app.get("/api/stock/:code", async (req, res) => {
 
     const code = req.params.code;
 
@@ -97,11 +73,11 @@ app.use((req, res) => {
 
     res.status(404).json({
 
-        success:false,
+        success: false,
 
-        message:"API 주소를 확인하세요",
+        message: "API 주소를 확인하세요",
 
-        path:req.originalUrl
+        path: req.originalUrl
 
     });
 
