@@ -1,4 +1,3 @@
-```javascript
 // =======================================
 // analyzer.js
 // V12 Ultimate 분석 엔진
@@ -6,9 +5,11 @@
 
 const indicator = require("./indicator");
 
+
 function analyze(data) {
 
     const close = data.close || [];
+
 
     // 데이터 부족
     if (close.length < 60) {
@@ -40,54 +41,97 @@ function analyze(data) {
 
     }
 
+
     const ma = indicator.getMA(close);
 
     const macd = indicator.getMACD(close);
 
     const rsi = indicator.getRSI(close);
 
+
     let score = 0;
 
+
     // 5일선 > 20일선
-    if (ma.ma5 > ma.ma20)
+    if (ma.ma5 > ma.ma20) {
+
         score += 30;
+
+    }
+
 
     // 20일선 > 60일선
-    if (ma.ma20 > ma.ma60)
+    if (ma.ma20 > ma.ma60) {
+
         score += 20;
 
-    // MACD
-    if (macd.macd > macd.signal)
+    }
+
+
+    // MACD 상승
+    if (macd.macd > macd.signal) {
+
         score += 30;
 
+    }
+
+
     // RSI
-    
-// RSI
-if (rsi < 30) {
-    score += 20;
-} else if (rsi > 70) {
-    score -= 10;
-}
-else if (rsi > 70)
-    score -= 10;
-현재 analyzer.
+    if (rsi < 30) {
+
+        score += 20;
+
+    } 
+    else if (rsi > 70) {
+
+        score -= 10;
+
+    }
+
+
+
     let signal = "";
 
-    if (score >= 90)
+
+    if (score >= 90) {
+
         signal = "★★★★★ 적극매수";
-    else if (score >= 80)
+
+    }
+    else if (score >= 80) {
+
         signal = "★★★★☆ 매수";
-    else if (score >= 70)
+
+    }
+    else if (score >= 70) {
+
         signal = "★★★☆☆ 관심";
-    else if (score >= 60)
+
+    }
+    else if (score >= 60) {
+
         signal = "★★☆☆☆ 관망";
-    else
+
+    }
+    else {
+
         signal = "☆☆☆☆☆ 비추천";
 
+    }
+
+
+
     const current = close[close.length - 1] || 0;
+
+
+    // 목표가 +5%
     const target = Math.round(current * 1.05);
 
+
+    // 손절가 -3%
     const stop = Math.round(current * 0.97);
+
+
 
     return {
 
@@ -109,9 +153,10 @@ else if (rsi > 70)
 
 }
 
+
+
 module.exports = {
 
     analyze
 
 };
-```
