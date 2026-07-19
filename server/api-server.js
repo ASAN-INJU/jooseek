@@ -72,6 +72,9 @@ app.get("/api/stock/:code", async (req, res) => {
             signalLine: analysis.macd.signal,
 
             rsi: analysis.rsi,
+target: analysis.target,
+
+stop: analysis.stop,
 
             score: analysis.score,
 
