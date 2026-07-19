@@ -1,3 +1,4 @@
+```javascript
 // ========================================
 // kis.js
 // 한국투자증권 API 전용
@@ -39,7 +40,6 @@ async function getAccessToken() {
     } catch (err) {
 
         console.log("토큰 발급 실패");
-
         console.log(err.response?.data || err.message);
 
         throw err;
@@ -136,37 +136,6 @@ async function getDailyPrices(code) {
 
 }
 
-// ========================================
-// 다른 파일에서 사용할 함수
-// ========================================
-// ===============================
-// 종합 조회
-// ===============================
-async function getStock(code) {
-
-    const price = await getPrice(code);
-
-    const daily = await getDailyPrices(code);
-
-    const close = daily.map(item => Number(item.stck_clpr));
-
-    return {
-
-        code,
-
-        name: price.hts_kor_isnm,
-
-        price: Number(price.stck_prpr),
-
-        change: Number(price.prdy_ctrt),
-
-        volume: Number(price.acml_vol),
-
-        close
-
-    };
-
-}
 // ===============================
 // 종합 종목 조회
 // ===============================
@@ -180,18 +149,32 @@ async function getStock(code) {
         .filter(v => !isNaN(v));
 
     return {
+
         code,
+
         name: price.hts_kor_isnm || "",
+
         price: Number(price.stck_prpr || 0),
+
         change: Number(price.prdy_ctrt || 0),
+
         open: Number(price.stck_oprc || 0),
+
         high: Number(price.stck_hgpr || 0),
+
         low: Number(price.stck_lwpr || 0),
+
         volume: Number(price.acml_vol || 0),
+
         close
+
     };
 
 }
+
+// ===============================
+// 외부 공개 함수
+// ===============================
 module.exports = {
 
     getAccessToken,
@@ -203,3 +186,4 @@ module.exports = {
     getStock
 
 };
+```
