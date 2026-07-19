@@ -173,6 +173,10 @@ module.exports = {
 
     getPrice,
 
-    getDailyPrices
+    getDailyPrices,
+
+    getStock
+
+};
 
 };
