@@ -167,6 +167,31 @@ async function getStock(code) {
     };
 
 }
+// ===============================
+// 종합 종목 조회
+// ===============================
+async function getStock(code) {
+
+    const price = await getPrice(code);
+    const daily = await getDailyPrices(code);
+
+    const close = daily
+        .map(item => Number(item.stck_clpr))
+        .filter(v => !isNaN(v));
+
+    return {
+        code,
+        name: price.hts_kor_isnm || "",
+        price: Number(price.stck_prpr || 0),
+        change: Number(price.prdy_ctrt || 0),
+        open: Number(price.stck_oprc || 0),
+        high: Number(price.stck_hgpr || 0),
+        low: Number(price.stck_lwpr || 0),
+        volume: Number(price.acml_vol || 0),
+        close
+    };
+
+}
 module.exports = {
 
     getAccessToken,
