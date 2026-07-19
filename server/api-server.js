@@ -1,63 +1,67 @@
-// ========================================
-// api-server.js
-// ========================================
+// ==========================================
+// V11.2 Ultimate API Server
+// ==========================================
 
 require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
 
-const { getPrice } = require("./kis");
-const { analyze } = require("./ai");
+const kis = require("./server/kis");
+const analyzer = require("./server/analyzer");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
 
-// 서버 확인
+// 서버 상태 확인
 app.get("/", (req, res) => {
 
     res.json({
-
-        server: "Stock AI Server",
-
-        version: "13.0",
-
-        status: "Running"
-
+        success: true,
+        version: "V11.2 Ultimate",
+        server: "Running"
     });
 
 });
 
-// 현재가 조회
-app.get("/api/price/:code", async (req, res) => {
+
+// 종목 조회
+app.get("/api/stock/:code", async (req, res) => {
 
     try {
 
         const code = req.params.code;
 
-        const stock = await getPrice(code);
+        // 한국투자증권 API 조회
+        const stock = await kis.getStock(code);
 
-        // 임시값
-        stock.ma5 = stock.price;
-        stock.ma20 = stock.price;
-        stock.ma60 = stock.price;
-        stock.rsi = 50;
+        // 기술적 분석
+        const analysis = analyzer.analyze({
+            close: stock.close || []
+        });
 
-        const result = analyze(stock);
+        res.json({
 
-        res.json(result);
+            success: true,
 
-    } catch (error) {
+            stock,
 
-        console.log(error);
+            analysis
+
+        });
+
+    } catch (err) {
+
+        console.error(err);
 
         res.status(500).json({
 
-            error: "주가 조회 실패"
+            success: false,
+
+            message: err.message
 
         });
 
@@ -65,14 +69,12 @@ app.get("/api/price/:code", async (req, res) => {
 
 });
 
+
+// 서버 시작
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
 
-    console.log("================================");
-
-    console.log(" Stock AI Server Running ");
-
-    console.log(" Port :", PORT);
-
-    console.log("================================");
+    console.log(`✅ V11.2 API Server Running : ${PORT}`);
 
 });
