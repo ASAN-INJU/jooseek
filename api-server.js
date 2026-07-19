@@ -1,3 +1,29 @@
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+
+// 기본 접속 확인
+app.get("/", (req,res)=>{
+    res.send("V11.2 API Server Running");
+});
+
+
+// 주식 조회
+app.get("/api/stock/:code", async (req,res)=>{
+    ...
+});
+
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT,()=>{
+    console.log(`Server running on ${PORT}`);
+});
 require("dotenv").config();
 
 console.log("=== NEW V11.2 SERVER START ===");
