@@ -1,115 +1,99 @@
-// ==============================================
-// V12 Ultimate API Server
-// server/api-server.js
-// ==============================================
+// =======================================
+// V11.2 Stock Analysis API Server
+// =======================================
 
 require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
 
-const kis = require("./kis");
-const analyzer = require("./analyzer");
-
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// ----------------------------------------------
-// 서버 상태 확인
-// ----------------------------------------------
+
+// 서버 확인
 app.get("/", (req, res) => {
 
-    res.json({
-        success: true,
-        server: "V12 Ultimate",
-        status: "Running",
-        time: new Date()
-    });
+    res.send("V11.2 API Server Running");
 
 });
 
-// ----------------------------------------------
-// 종목 조회
-// ----------------------------------------------
+
+// =======================================
+// 주식 조회 API
+// =======================================
+
 app.get("/api/stock/:code", async (req, res) => {
+
+    const code = req.params.code;
+
 
     try {
 
-        const code = req.params.code;
+        // 현재는 테스트 데이터
+        // 다음 단계에서 한국투자증권 API 연결
 
-        // 한국투자증권 조회
-        const stock = await kis.getStock(code);
+        const stock = {
 
-        // 기술적 분석
-        const analysis = analyzer.analyze({
-            close: stock.close
-        });
+            code: code,
 
-        res.json({
+            name: "삼성전자",
 
-            success: true,
+            price: 85000,
 
-            name: stock.name,
+            change: 1.25,
 
-            code: stock.code,
+            volume: 12345678,
 
-            price: stock.price,
 
-            change: stock.change,
+            // 이동평균선 테스트
+            ma5: 84200,
 
-            volume: stock.volume,
+            ma20: 83000,
 
-            ma5: analysis.ma.ma5,
+            ma60: 79000,
 
-            ma20: analysis.ma.ma20,
 
-            ma60: analysis.ma.ma60,
+            // 단타 분석 점수
+            score: 82,
 
-            macd: analysis.macd.macd,
+            signal: "매수 관심"
 
-            signalLine: analysis.macd.signal,
+        };
 
-            rsi: analysis.rsi,
-target: analysis.target,
 
-stop: analysis.stop,
+        res.json(stock);
 
-            score: analysis.score,
 
-            signal: analysis.signal
+    } catch(error) {
 
-        });
-
-    } catch (err) {
-
-        console.error(err);
 
         res.status(500).json({
 
-            success: false,
-
-            message: err.message
+            error:"주가 조회 실패"
 
         });
 
+
     }
+
 
 });
 
-// ----------------------------------------------
-// 서버 실행
-// ----------------------------------------------
+
+// =======================================
+// 서버 시작
+// =======================================
+
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
 
-    console.log("");
-    console.log("====================================");
-    console.log(" V12 Ultimate API Server Started");
-    console.log(" PORT : " + PORT);
-    console.log("====================================");
-    console.log("");
+app.listen(PORT,()=>{
+
+    console.log(
+        `V11.2 Server running on port ${PORT}`
+    );
 
 });
