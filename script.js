@@ -73,9 +73,9 @@ async function getPrice(code){
 
         const response = await fetch(
 
-        "https://v11-api-server.onrender.com/api/price/" + code
+"https://v11-api-server.onrender.com/api/stock/" + code
 
-        );
+);
 
         const data = await response.json();
 
