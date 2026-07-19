@@ -1,47 +1,111 @@
+```javascript
+// =======================================
+// analyzer.js
+// V12 Ultimate 분석 엔진
+// =======================================
+
 const indicator = require("./indicator");
 
 function analyze(data) {
 
-    const result = {};
+    const close = data.close || [];
 
-    result.ma = indicator.getMA(data.close);
-    result.macd = indicator.getMACD(data.close);
-    result.rsi = indicator.getRSI(data.close);
+    // 데이터 부족
+    if (close.length < 60) {
+
+        return {
+
+            ma: {
+                ma5: 0,
+                ma20: 0,
+                ma60: 0
+            },
+
+            macd: {
+                macd: 0,
+                signal: 0
+            },
+
+            rsi: 0,
+
+            score: 0,
+
+            signal: "데이터 부족",
+
+            target: 0,
+
+            stop: 0
+
+        };
+
+    }
+
+    const ma = indicator.getMA(close);
+
+    const macd = indicator.getMACD(close);
+
+    const rsi = indicator.getRSI(close);
 
     let score = 0;
 
-    // 이동평균
-    if (result.ma.ma5 > result.ma.ma20)
+    // 5일선 > 20일선
+    if (ma.ma5 > ma.ma20)
         score += 30;
 
-    if (result.ma.ma20 > result.ma.ma60)
+    // 20일선 > 60일선
+    if (ma.ma20 > ma.ma60)
         score += 20;
 
     // MACD
-    if (result.macd.macd > result.macd.signal)
+    if (macd.macd > macd.signal)
         score += 30;
 
     // RSI
-    if (result.rsi < 30)
+    if (rsi < 30)
         score += 20;
 
-    result.score = score;
+    let signal = "";
 
-    if (score >= 80)
-        result.signal = "★★★★★ 강력매수";
-
+    if (score >= 90)
+        signal = "★★★★★ 적극매수";
+    else if (score >= 80)
+        signal = "★★★★☆ 매수";
+    else if (score >= 70)
+        signal = "★★★☆☆ 관심";
     else if (score >= 60)
-        result.signal = "★★★★ 매수";
-
-    else if (score >= 40)
-        result.signal = "★★★ 관망";
-
+        signal = "★★☆☆☆ 관망";
     else
-        result.signal = "★ 매도주의";
+        signal = "☆☆☆☆☆ 비추천";
 
-    return result;
+    const current = close[0];
+
+    const target = Math.round(current * 1.05);
+
+    const stop = Math.round(current * 0.97);
+
+    return {
+
+        ma,
+
+        macd,
+
+        rsi,
+
+        score,
+
+        signal,
+
+        target,
+
+        stop
+
+    };
+
 }
 
 module.exports = {
+
     analyze
+
 };
+```
