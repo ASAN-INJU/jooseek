@@ -13,79 +13,45 @@ app.use(cors());
 app.use(express.json());
 
 
-// 서버 확인
-app.get("/", (req, res) => {
-
+// 기본 접속 확인
+app.get("/", (req,res)=>{
     res.send("V11.2 API Server Running");
-
 });
 
 
-// =======================================
-// 주식 조회 API
-// =======================================
-
-app.get("/api/stock/:code", async (req, res) => {
+// 주식 조회 테스트 API
+app.get("/api/stock/:code", (req,res)=>{
 
     const code = req.params.code;
 
+    res.json({
 
-    try {
+        code: code,
 
-        // 현재는 테스트 데이터
-        // 다음 단계에서 한국투자증권 API 연결
+        name:"삼성전자",
 
-        const stock = {
+        price:85000,
 
-            code: code,
+        change:1.25,
 
-            name: "삼성전자",
+        volume:12345678,
 
-            price: 85000,
+        ma5:84200,
 
-            change: 1.25,
+        ma20:83000,
 
-            volume: 12345678,
+        ma60:79000,
 
+        score:82,
 
-            // 이동평균선 테스트
-            ma5: 84200,
+        signal:"매수 관심"
 
-            ma20: 83000,
-
-            ma60: 79000,
-
-
-            // 단타 분석 점수
-            score: 82,
-
-            signal: "매수 관심"
-
-        };
-
-
-        res.json(stock);
-
-
-    } catch(error) {
-
-
-        res.status(500).json({
-
-            error:"주가 조회 실패"
-
-        });
-
-
-    }
-
+    });
 
 });
 
 
-// =======================================
-// 서버 시작
-// =======================================
+// 서버 실행
 
 const PORT = process.env.PORT || 3000;
 
