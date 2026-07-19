@@ -62,9 +62,11 @@ function analyze(data) {
 
     // RSI
     
-    if (rsi < 30)
-        score += 20;
-
+if (rsi < 30)
+    score += 20;
+else if (rsi > 70)
+    score -= 10;
+현재 analyzer.
     let signal = "";
 
     if (score >= 90)
