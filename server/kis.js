@@ -139,7 +139,34 @@ async function getDailyPrices(code) {
 // ========================================
 // 다른 파일에서 사용할 함수
 // ========================================
+// ===============================
+// 종합 조회
+// ===============================
+async function getStock(code) {
 
+    const price = await getPrice(code);
+
+    const daily = await getDailyPrices(code);
+
+    const close = daily.map(item => Number(item.stck_clpr));
+
+    return {
+
+        code,
+
+        name: price.hts_kor_isnm,
+
+        price: Number(price.stck_prpr),
+
+        change: Number(price.prdy_ctrt),
+
+        volume: Number(price.acml_vol),
+
+        close
+
+    };
+
+}
 module.exports = {
 
     getAccessToken,
