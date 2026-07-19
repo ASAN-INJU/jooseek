@@ -1,1 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+
+<title>
+V12 Ultimate 주식 단타 분석 앱
+</title>
+
+
+<link rel="stylesheet" href="style.css">
+
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>
+📈 V12 Ultimate
+</h1>
+
+<p>
+AI 주식 단타 분석 시스템
+</p>
+
+
+
+<!-- =====================
+종목 검색
+===================== -->
+
+
+<div class="search">
+
+
+<input
+
+id="stockCode"
+
+placeholder="종목명 입력 (예: 삼성전자)"
+
+
+autocomplete="off"
+
+
+>
+
+
+<div id="suggestions"></div>
+
+
+</div>
+
+
+
+
+
+<!-- =====================
+기본 정보
+===================== -->
+
+
+<div class="card">
+
+
+<h2 id="name">
+종목명
+</h2>
+
+
+
+<h1 id="price">
+0원
+</h1>
+
+
+
+<p>
+등락률 :
+<span id="change">0%</span>
+</p>
+
+
+
+<p>
+거래량 :
+<span id="volume">0</span>
+</p>
+
+
+</div>
+
+
+
+
+
+<!-- =====================
+가격 정보
+===================== -->
+
+
+<div class="card">
+
+
+<h3>
+가격 정보
+</h3>
+
+
+<p>
+시가 :
+<span id="open">0</span>
+</p>
+
+
+<p>
+고가 :
+<span id="high">0</span>
+</p>
+
+
+<p>
+저가 :
+<span id="low">0</span>
+</p>
+
+
+</div>
+
+
+
+
+
+
+<!-- =====================
+기술 분석
+===================== -->
+
+
+<div class="card">
+
+
+<h3>
+기술 분석
+</h3>
+
+
+<p>
+MA5 :
+<span id="ma5">0</span>
+</p>
+
+
+<p>
+MA20 :
+<span id="ma20">0</span>
+</p>
+
+
+<p>
+MA60 :
+<span id="ma60">0</span>
+</p>
+
+
+<p>
+점수 :
+<span id="score">0점</span>
+</p>
+
+
+<p>
+신호 :
+<span id="signal">
+-
+</span>
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =====================
+매매 기준
+===================== -->
+
+
+<div class="card">
+
+
+<h3>
+매매 기준
+</h3>
+
+
+<p>
+🎯 목표가 :
+<span id="target">
+0
+</span>
+원
+</p>
+
+
+<p>
+🛑 손절가 :
+<span id="stop">
+0
+</span>
+원
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =====================
+차트
+===================== -->
+
+
+<div class="card chartBox">
+
+
+<h3>
+차트 분석
+</h3>
+
+
+<canvas id="chart"></canvas>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =====================
+AI 분석
+===================== -->
+
+
+<div class="card">
+
+
+<h3>
+AI 분석 결과
+</h3>
+
+
+<div id="analysis">
+
+분석 결과 대기중
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- =====================
+뉴스
+===================== -->
+
+
+<div class="card">
+
+
+<h3>
+관련 뉴스
+</h3>
+
+
+<div id="news">
+
+뉴스 준비중
+
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+<script src="script.js"></script>
+
+
+</body>
+
+</html>
