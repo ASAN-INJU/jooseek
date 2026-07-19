@@ -2,11 +2,12 @@
   "name": "stock-ai-v13",
   "version": "13.0.0",
   "description": "주식 단타 AI 분석 서버",
-  "main": "api-server.js",
-  "scripts": {
-    "start": "node api-server.js",
-    "dev": "nodemon api-server.js"
-  },
+ "main": "server.js",
+
+"scripts": {
+  "start": "node server.js",
+  "dev": "nodemon server.js"
+}
   "dependencies": {
     "axios": "^1.8.2",
     "cors": "^2.8.5",
