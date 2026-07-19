@@ -61,6 +61,7 @@ function analyze(data) {
         score += 30;
 
     // RSI
+    
     if (rsi < 30)
         score += 20;
 
@@ -77,7 +78,7 @@ function analyze(data) {
     else
         signal = "☆☆☆☆☆ 비추천";
 
-    const current = close[0];
+    const current = close[close.length - 1];
 
     const target = Math.round(current * 1.05);
 
