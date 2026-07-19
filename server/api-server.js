@@ -7,8 +7,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 
-const kis = require("./server/kis");
-const analyzer = require("./server/analyzer");
+const kis = require("./kis");
+const analyzer = require("./analyzer");
 
 const app = express();
 
